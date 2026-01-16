@@ -10,20 +10,20 @@ function ProductDetailPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
+    const loadProduct = async () => {
+      try {
+        const { data } = await fetchProductById(id);
+        setProduct(data);
+        setSelectedImageIndex(0);
+      } catch (error) {
+        console.error('Error loading product:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadProduct();
   }, [id]);
-
-  const loadProduct = async () => {
-    try {
-      const { data } = await fetchProductById(id);
-      setProduct(data);
-      setSelectedImageIndex(0);
-    } catch (error) {
-      console.error('Error loading product:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleAddToCart = async () => {
     try {
@@ -89,8 +89,8 @@ function ProductDetailPage() {
           <div style={styles.middleSection}>
             {/* Main Image */}
             <div style={styles.mainImageContainer}>
-              <img 
-                src={currentImage} 
+              <img
+                src={currentImage}
                 alt={product.name}
                 style={styles.mainImage}
               />
@@ -101,7 +101,7 @@ function ProductDetailPage() {
 
             {/* Title and Rating */}
             <h1 style={styles.title}>{product.name}</h1>
-            
+
             <div style={styles.ratingRow}>
               <span style={styles.ratingStars}>⭐⭐⭐⭐☆ 4.5</span>
               <span style={styles.reviewCount}>(10,096)</span>
@@ -233,7 +233,7 @@ function ProductDetailPage() {
 
               {/* Seller Info */}
               <p style={styles.sellerInfo}>
-                Ships from <strong>Amazon</strong><br/>
+                Ships from <strong>Amazon</strong><br />
                 Sold by <strong>Clicktech Retail Private Ltd</strong>
               </p>
 
@@ -295,7 +295,7 @@ const styles = {
     gap: '20px',
     backgroundColor: '#fff'
   },
-  
+
   /* Left Sidebar */
   leftSidebar: {
     display: 'flex',
@@ -317,7 +317,7 @@ const styles = {
     height: '100%',
     objectFit: 'contain'
   },
-  
+
   /* Middle Section */
   middleSection: {
     paddingRight: '20px'
@@ -530,7 +530,7 @@ const styles = {
     color: '#666',
     lineHeight: '1.6'
   },
-  
+
   /* Right Sidebar */
   rightSidebar: {
     position: 'sticky',

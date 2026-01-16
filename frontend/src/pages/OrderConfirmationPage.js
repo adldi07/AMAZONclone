@@ -9,19 +9,19 @@ function OrderConfirmationPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const loadOrder = async () => {
+      try {
+        const { data } = await getOrderById(orderId);
+        setOrder(data);
+      } catch (error) {
+        console.error('Error loading order:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadOrder();
   }, [orderId]);
-
-  const loadOrder = async () => {
-    try {
-      const { data } = await getOrderById(orderId);
-      setOrder(data);
-    } catch (error) {
-      console.error('Error loading order:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) return <div style={styles.container}><p>Loading order...</p></div>;
   if (!order) return <div style={styles.container}><p>Order not found</p></div>;
@@ -84,13 +84,13 @@ function OrderConfirmationPage() {
               </div>
               <div style={styles.summaryRow}>
                 <span>Shipping Charge:</span>
-                <span style={{color: '#0f9d58'}}>FREE</span>
+                <span style={{ color: '#0f9d58' }}>FREE</span>
               </div>
               <div style={styles.summaryRow}>
                 <span>Tax:</span>
                 <span>₹0.00</span>
               </div>
-              <div style={{...styles.summaryRow, ...styles.totalRow}}>
+              <div style={{ ...styles.summaryRow, ...styles.totalRow }}>
                 <span>Order Total:</span>
                 <span>₹{order.totalAmount}</span>
               </div>
@@ -112,18 +112,18 @@ function OrderConfirmationPage() {
           <div style={styles.deliveryBox}>
             <h3 style={styles.deliveryTitle}>Estimated Delivery</h3>
             <p style={styles.deliveryDate}>{estimatedDelivery}</p>
-            
+
             <div style={styles.trackingSection}>
               <div style={styles.trackingStep}>
-                <div style={{...styles.trackingCircle, backgroundColor: '#0f9d58'}}>✓</div>
+                <div style={{ ...styles.trackingCircle, backgroundColor: '#0f9d58' }}>✓</div>
                 <div style={styles.trackingText}>
                   <p style={styles.trackingLabel}>Order Confirmed</p>
                   <p style={styles.trackingTime}>Today</p>
                 </div>
               </div>
-              
+
               <div style={styles.trackingLine} />
-              
+
               <div style={styles.trackingStep}>
                 <div style={styles.trackingCircle}>2</div>
                 <div style={styles.trackingText}>
@@ -131,9 +131,9 @@ function OrderConfirmationPage() {
                   <p style={styles.trackingTime}>Tomorrow</p>
                 </div>
               </div>
-              
+
               <div style={styles.trackingLine} />
-              
+
               <div style={styles.trackingStep}>
                 <div style={styles.trackingCircle}>3</div>
                 <div style={styles.trackingText}>
@@ -141,9 +141,9 @@ function OrderConfirmationPage() {
                   <p style={styles.trackingTime}>Jan 18</p>
                 </div>
               </div>
-              
+
               <div style={styles.trackingLine} />
-              
+
               <div style={styles.trackingStep}>
                 <div style={styles.trackingCircle}>4</div>
                 <div style={styles.trackingText}>
@@ -151,9 +151,9 @@ function OrderConfirmationPage() {
                   <p style={styles.trackingTime}>Jan 19</p>
                 </div>
               </div>
-              
+
               <div style={styles.trackingLine} />
-              
+
               <div style={styles.trackingStep}>
                 <div style={styles.trackingCircle}>5</div>
                 <div style={styles.trackingText}>
@@ -164,7 +164,7 @@ function OrderConfirmationPage() {
             </div>
           </div>
 
-          <button 
+          <button
             onClick={() => navigate('/')}
             style={styles.continueButton}
           >

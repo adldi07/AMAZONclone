@@ -12,10 +12,6 @@ function HomePage({ searchQuery }) {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
-  useEffect(() => {
-    loadProducts();
-  }, [category, searchQuery]);
-
   // if URL has ?category=..., use it to override initial category
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -23,26 +19,30 @@ function HomePage({ searchQuery }) {
     if (cat) setCategory(cat);
   }, [location.search]);
 
-  const loadProducts = async () => {
-    try {
-      setLoading(true);
-      const { data } = await fetchProducts(category, searchQuery);
-      setProducts(data);
-    } catch (error) {
-      console.error('Error loading products:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        const { data } = await fetchProducts(category, searchQuery);
+        setProducts(data);
+      } catch (error) {
+        console.error('Error loading products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, [category, searchQuery]);
 
   return (
     <div style={styles.container}>
       <HeroBanner />
-      
+
       {category === 'all' && !searchQuery && <CategoryProductListing />}
-      
+
       <CategoryFilter category={category} setCategory={setCategory} />
-      
+
       {loading ? (
         <p>Loading products...</p>
       ) : (
@@ -52,7 +52,7 @@ function HomePage({ searchQuery }) {
           ))}
         </div>
       )}
-      
+
       {!loading && products.length === 0 && (
         <p>No products found.</p>
       )}
