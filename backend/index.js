@@ -27,6 +27,24 @@ app.use(cors({
 app.use(cookieParser()); // ADD THIS - Must be before routes
 app.use(express.json());
 
+// Health Check Endpoint
+app.get('/api/health', async (req, res) => {
+  try {
+    await sequelize.authenticate();
+    res.json({
+      status: 'ok',
+      database: 'connected',
+      // enviroment: process.env.NODE_ENV
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      database: 'disconnected',
+      error: error.message
+    });
+  }
+});
+
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
