@@ -12,15 +12,15 @@ function CartItem({ item, selected = true, onSelect, onUpdate, onRemove }) {
   return (
     <div style={styles.item}>
       <div style={styles.topRow}>
-        <input 
-          type="checkbox" 
-          checked={!!selected} 
-          onChange={onSelect} 
-          style={{marginRight:16, width: 20, height: 20, cursor: 'pointer'}}
+        <input
+          type="checkbox"
+          checked={!!selected}
+          onChange={onSelect}
+          style={{ marginRight: 16, width: 20, height: 20, cursor: 'pointer' }}
         />
         <div style={styles.imageContainer}>
-          <img 
-            src={item.product.image} 
+          <img
+            src={item.product.image}
             alt={item.product.name}
             style={styles.image}
           />
@@ -50,12 +50,12 @@ function CartItem({ item, selected = true, onSelect, onUpdate, onRemove }) {
 
           <div style={styles.optionsSection}>
             <label style={styles.optionLabel}>
-              <input type="checkbox" /> This will be a gift <a href="#" style={styles.learnMore}>Learn more</a>
+              <input type="checkbox" /> This will be a gift <span style={styles.learnMore}>Learn more</span>
             </label>
           </div>
 
           <div style={styles.controlsRow}>
-            <div style={styles.pill}> 
+            <div style={styles.pill}>
               <button onClick={() => onRemove(item.id)} style={styles.trashBtn}>🗑️</button>
               <button onClick={decrease} style={styles.pillBtn}>−</button>
               <div style={styles.pillValue}>{item.quantity}</div>

@@ -71,8 +71,8 @@ function Header({ onSearch }) {
   return (
     <div>
       {/* Auth Modal */}
-      <AuthModal 
-        isOpen={showAuthModal} 
+      <AuthModal
+        isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         onLoginSuccess={handleLoginSuccess}
       />
@@ -152,15 +152,15 @@ function Header({ onSearch }) {
             </div>
 
             {/* Account with dropdown */}
-            <div 
-              style={styles.iconBox} 
+            <div
+              style={styles.iconBox}
               onMouseEnter={() => setShowAccountMenu(true)}
               onMouseLeave={() => setShowAccountMenu(false)}
               onClick={() => !user && setShowAuthModal(true)}
             >
               <span style={styles.small}>Hello, {user ? user.name : 'sign in'}</span>
               <div style={styles.bold}>Account & Lists</div>
-              
+
               {/* Dropdown Menu */}
               {showAccountMenu && user && (
                 <div style={styles.dropdown}>
@@ -187,11 +187,11 @@ function Header({ onSearch }) {
       <nav style={styles.navbar}>
         <div style={styles.navContainer}>
           <button style={styles.navButton} onClick={() => setShowSidebar(true)}>☰ All</button>
-          <a href="#" style={styles.navLink}>Today's Deals</a>
-          <a href="#" style={styles.navLink}>Customer Service</a>
-          <a href="#" style={styles.navLink}>Registry</a>
-          <a href="#" style={styles.navLink}>Gift Cards</a>
-          <a href="#" style={styles.navLink}>Sell</a>
+          <span style={styles.navLink}>Today's Deals</span>
+          <span style={styles.navLink}>Customer Service</span>
+          <span style={styles.navLink}>Registry</span>
+          <span style={styles.navLink}>Gift Cards</span>
+          <span style={styles.navLink}>Sell</span>
         </div>
       </nav>
     </div>

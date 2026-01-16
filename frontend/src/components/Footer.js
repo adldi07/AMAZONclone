@@ -8,33 +8,33 @@ function Footer() {
       <div style={styles.columnsContainer}>
         <div style={styles.column}>
           <h4 style={styles.columnTitle}>Get to Know Us</h4>
-          <a style={styles.link}>About Scaler</a>
-          <a style={styles.link}>Careers</a>
-          <a style={styles.link}>Press Releases</a>
-          <a style={styles.link}>Scaler Science</a>
+          <span style={styles.link}>About Scaler</span>
+          <span style={styles.link}>Careers</span>
+          <span style={styles.link}>Press Releases</span>
+          <span style={styles.link}>Scaler Science</span>
         </div>
 
         <div style={styles.column}>
           <h4 style={styles.columnTitle}>Connect with Us</h4>
-          <a style={styles.link}>Facebook</a>
-          <a style={styles.link}>Twitter</a>
-          <a style={styles.link}>Instagram</a>
+          <span style={styles.link}>Facebook</span>
+          <span style={styles.link}>Twitter</span>
+          <span style={styles.link}>Instagram</span>
         </div>
 
         <div style={styles.column}>
           <h4 style={styles.columnTitle}>Make Money with Us</h4>
-          <a style={styles.link}>Sell on Scaler</a>
-          <a style={styles.link}>Sell under Scaler Accelerator</a>
-          <a style={styles.link}>Advertise Your Products</a>
-          <a style={styles.link}>Scaler Pay on Merchants</a>
+          <span style={styles.link}>Sell on Scaler</span>
+          <span style={styles.link}>Sell under Scaler Accelerator</span>
+          <span style={styles.link}>Advertise Your Products</span>
+          <span style={styles.link}>Scaler Pay on Merchants</span>
         </div>
 
         <div style={styles.column}>
           <h4 style={styles.columnTitle}>Let Us Help You</h4>
-          <a style={styles.link}>Your Account</a>
-          <a style={styles.link}>Returns Centre</a>
-          <a style={styles.link}>Product Safety Alerts</a>
-          <a style={styles.link}>Help</a>
+          <span style={styles.link}>Your Account</span>
+          <span style={styles.link}>Returns Centre</span>
+          <span style={styles.link}>Product Safety Alerts</span>
+          <span style={styles.link}>Help</span>
         </div>
       </div>
 

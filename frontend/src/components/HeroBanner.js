@@ -67,7 +67,7 @@ function HeroBanner() {
                 )}
               </div>
             </div>
-            <a style={styles.seeAllLink}>See all offers</a>
+            <span style={styles.seeAllLink}>See all offers</span>
           </div>
         ))}
       </div>
