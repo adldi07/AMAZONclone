@@ -8,9 +8,9 @@ const app = express();
 
 // CORS configuration for cookies
 const allowedOrigins = [
+  process.env.FRONTEND_URL,
   'http://localhost:3000',
-  'https://amazo-nclone.vercel.app',
-  process.env.FRONTEND_URL
+  'https://amazo-nclone.vercel.app'
 ].filter(Boolean);
 
 app.use(cors({
