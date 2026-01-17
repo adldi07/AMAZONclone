@@ -47,19 +47,28 @@ app.get('/api/test', (req, res) => {
 // Health Check Endpoint
 app.get('/api/health', async (req, res) => {
   try {
-    console.log('DB ConnectionHealth Check Endpoint hit');
     const { sequelize } = require('./models');
     await sequelize.authenticate();
-    res.json({ status: 'ok', database: 'connected' });
+    res.json({
+      status: 'ok',
+      database: 'connected',
+      timestamp: new Date().toISOString()
+    });
   } catch (error) {
-    console.log(`DB ConnectionHealth Check Endpoint Failed, PG_URL: ${process.env.POSTGRES_URL}`);
-    res.status(500).json({ status: 'error', database: 'disconnected', details: error.message });
+    console.error('Health check failed:', error);
+    res.status(500).json({
+      status: 'error',
+      database: 'disconnected',
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+      timestamp: new Date().toISOString()
+    });
   }
 });
 
-// app.get('/', (req, res) => {
-//   res.send('Hello World! We are live');
-// });
+app.get('/', (req, res) => {
+  res.send('Hello World! We are live');
+});
 
 // Lazy load routes
 app.use('/api/auth', (req, res, next) => require('./routes/authRoutes')(req, res, next));
@@ -69,17 +78,17 @@ app.use('/api/orders', (req, res, next) => require('./routes/orderRoutes')(req, 
 
 const PORT = process.env.PORT || 5000;
 
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // Local development sync
-if (process.env.NODE_ENV !== 'production') {
-  const { sequelize } = require('./models');
-  sequelize.sync({ alter: true })
-    .then(() => {
-      console.log('Database synced successfully');
-      app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-    })
-    .catch(err => console.error('Database sync failed:', err.message));
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   const { sequelize } = require('./models');
+//   sequelize.sync({ alter: true })
+//     .then(() => {
+//       console.log('Database synced successfully');
+//       app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+//     })
+//     .catch(err => console.error('Database sync failed:', err.message));
+// }
 
 module.exports = app;
