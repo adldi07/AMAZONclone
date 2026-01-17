@@ -1,4 +1,7 @@
 require('dotenv').config();
+// Force bundling of database drivers for Vercel
+require('pg');
+require('pg-hstore');
 const express = require('express');
 
 const app = express();
