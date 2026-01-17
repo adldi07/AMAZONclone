@@ -2,7 +2,8 @@ require('dotenv').config();
 
 const { Sequelize } = require('sequelize');
 
-console.log('POSTGRES_URL:', process.env.POSTGRES_URL);
+// Database configuration initialized
+
 
 console.log('Initializing Database Configuration...');
 console.log('POSTGRES_URL present:', !!process.env.POSTGRES_URL);

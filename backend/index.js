@@ -1,8 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const cookieParser = require('cookie-parser'); // ADD THIS
-const { sequelize } = require('./models');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -24,29 +23,34 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(cookieParser()); // ADD THIS - Must be before routes
+app.use(cookieParser());
 app.use(express.json());
 
-// Simple Test Endpoint (No DB)
+const PORT = process.env.PORT || 5000;
+
+// IMPORTANT: Start server immediately for local debugging
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+// Simple Test Endpoint (Zero dependencies)
 app.get('/api/test', (req, res) => {
-  res.json({ message: 'Backend is alive!', time: new Date().toISOString() });
+  res.json({
+    message: 'Backend is alive!',
+    time: new Date().toISOString()
+  });
 });
 
-// Health Check Endpoint
+// Health Check Endpoint (Lazy Load DB)
 app.get('/api/health', async (req, res) => {
   try {
+    const { sequelize } = require('./models');
     await sequelize.authenticate();
-    res.json({
-      status: 'ok',
-      database: 'connected',
-      // enviroment: process.env.NODE_ENV
-    });
+    res.json({ status: 'ok', database: 'connected' });
   } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      database: 'disconnected',
-      error: error.message
-    });
+    res.status(500).json({ status: 'error', database: 'disconnected', details: error.message });
   }
 });
 
@@ -56,18 +60,12 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/cart', require('./routes/cartRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 
-const PORT = process.env.PORT || 5000;
-
-// Only start the server if we're not in a Vercel environment (where module.exports is used)
+// Local development sync
 if (process.env.NODE_ENV !== 'production') {
+  const { sequelize } = require('./models');
   sequelize.sync({ alter: true })
-    .then(() => {
-      console.log('Database synced');
-      app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-      });
-    })
-    .catch(err => console.error('Database sync failed:', err));
+    .then(() => console.log('Database synced successfully'))
+    .catch(err => console.error('Database sync failed (Server still running):', err.message));
 }
 
 module.exports = app;
