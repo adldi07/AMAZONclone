@@ -27,6 +27,11 @@ app.use(cors({
 app.use(cookieParser()); // ADD THIS - Must be before routes
 app.use(express.json());
 
+// Simple Test Endpoint (No DB)
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Backend is alive!', time: new Date().toISOString() });
+});
+
 // Health Check Endpoint
 app.get('/api/health', async (req, res) => {
   try {
