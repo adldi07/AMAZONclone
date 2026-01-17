@@ -38,7 +38,8 @@ app.get('/api/test', (req, res) => {
     time: new Date().toISOString(),
     env: {
       NODE_ENV: process.env.NODE_ENV,
-      DB_URL_PRESENT: !!process.env.POSTGRES_URL
+      DB_URL_PRESENT: !!process.env.POSTGRES_URL,
+      DB_URL_PRESENT_URL: process.env.POSTGRES_URL
     }
   });
 });
@@ -46,13 +47,19 @@ app.get('/api/test', (req, res) => {
 // Health Check Endpoint
 app.get('/api/health', async (req, res) => {
   try {
+    console.log('DB ConnectionHealth Check Endpoint hit');
     const { sequelize } = require('./models');
     await sequelize.authenticate();
     res.json({ status: 'ok', database: 'connected' });
   } catch (error) {
+    console.log(`DB ConnectionHealth Check Endpoint Failed, PG_URL: ${process.env.POSTGRES_URL}`);
     res.status(500).json({ status: 'error', database: 'disconnected', details: error.message });
   }
 });
+
+// app.get('/', (req, res) => {
+//   res.send('Hello World! We are live');
+// });
 
 // Lazy load routes
 app.use('/api/auth', (req, res, next) => require('./routes/authRoutes')(req, res, next));
@@ -61,6 +68,8 @@ app.use('/api/cart', (req, res, next) => require('./routes/cartRoutes')(req, res
 app.use('/api/orders', (req, res, next) => require('./routes/orderRoutes')(req, res, next));
 
 const PORT = process.env.PORT || 5000;
+
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // Local development sync
 if (process.env.NODE_ENV !== 'production') {
