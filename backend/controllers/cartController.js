@@ -2,9 +2,10 @@ const { Cart, CartItem, Product } = require('../models');
 
 exports.getCart = async (req, res) => {
   try {
-    console.log('Fetching cart for user:', 'default_user');
+    const userId = req.userId ? String(req.userId) : 'default_user';
+    console.log('Fetching cart for user:', userId);
     let cart = await Cart.findOne({
-      where: { userId: 'default_user', status: 'active' },
+      where: { userId, status: 'active' },
       include: [{
         model: CartItem,
         as: 'items',
@@ -13,7 +14,7 @@ exports.getCart = async (req, res) => {
     });
 
     if (!cart) {
-      cart = await Cart.create({ userId: 'default_user' });
+      cart = await Cart.create({ userId });
       cart.items = [];
     }
 
@@ -26,6 +27,7 @@ exports.getCart = async (req, res) => {
 exports.addToCart = async (req, res) => {
   try {
     const { productId, quantity } = req.body;
+    const userId = req.userId ? String(req.userId) : 'default_user';
 
     const product = await Product.findByPk(productId);
     if (!product) {
@@ -33,11 +35,11 @@ exports.addToCart = async (req, res) => {
     }
 
     let cart = await Cart.findOne({
-      where: { userId: 'default_user', status: 'active' }
+      where: { userId, status: 'active' }
     });
 
     if (!cart) {
-      cart = await Cart.create({ userId: 'default_user' });
+      cart = await Cart.create({ userId });
     }
 
     const existingItem = await CartItem.findOne({

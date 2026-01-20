@@ -26,6 +26,8 @@ function ProtectedRoute({ element }) {
   }
 
   if (!isAuthenticated) {
+    // Trigger login modal
+    window.dispatchEvent(new Event('openAuthModal'));
     return <Navigate to="/" replace />;
   }
 

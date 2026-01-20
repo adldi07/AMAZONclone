@@ -9,6 +9,7 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
 import SearchResultsPage from './pages/SearchResultsPage';
+import OrdersPage from './pages/OrdersPage';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -17,7 +18,7 @@ function App() {
     <BrowserRouter>
       <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
         <Header onSearch={setSearchQuery} />
-        
+
         <Routes>
           <Route path="/" element={<HomePage searchQuery={searchQuery} />} />
           <Route path="/search" element={<SearchResultsPage />} />
@@ -25,6 +26,7 @@ function App() {
           <Route path="/cart" element={<ProtectedRoute element={<CartPage />} />} />
           <Route path="/checkout" element={<ProtectedRoute element={<CheckoutPage />} />} />
           <Route path="/order-confirmation/:orderId" element={<ProtectedRoute element={<OrderConfirmationPage />} />} />
+          <Route path="/orders" element={<ProtectedRoute element={<OrdersPage />} />} />
         </Routes>
         <Footer />
       </div>

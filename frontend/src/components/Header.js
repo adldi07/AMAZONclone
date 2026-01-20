@@ -45,7 +45,15 @@ function Header({ onSearch }) {
 
     loadCart();
     window.addEventListener('cartUpdated', onCartUpdated);
-    return () => window.removeEventListener('cartUpdated', onCartUpdated);
+
+    // Listen for global auth modal events
+    const handleOpenAuthModal = () => setShowAuthModal(true);
+    window.addEventListener('openAuthModal', handleOpenAuthModal);
+
+    return () => {
+      window.removeEventListener('cartUpdated', onCartUpdated);
+      window.removeEventListener('openAuthModal', handleOpenAuthModal);
+    };
   }, []);
 
   const handleSearch = (e) => {
@@ -170,7 +178,7 @@ function Header({ onSearch }) {
               )}
             </div>
 
-            <div style={styles.iconBox}>
+            <div style={styles.iconBox} onClick={() => navigate('/orders')}>
               <span style={styles.small}>Returns</span>
               <div style={styles.bold}>& Orders</div>
             </div>

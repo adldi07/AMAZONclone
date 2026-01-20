@@ -57,4 +57,5 @@ export const removeCartItem = async (itemId) => {
 
 // Order APIs
 export const createOrder = (shipping) => API.post('/orders', { shipping });
+export const getMyOrders = () => API.get('/orders/myorders');
 export const getOrderById = (orderId) => API.get(`/orders/${orderId}`);
