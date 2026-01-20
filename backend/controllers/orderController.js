@@ -1,5 +1,7 @@
 const { Order, OrderItem, Cart, CartItem, Product } = require('../models');
 
+const { sendOrderConfirmationEmail } = require('../utils/emailService');
+
 exports.createOrder = async (req, res) => {
   try {
     const { shipping } = req.body;
@@ -15,7 +17,6 @@ exports.createOrder = async (req, res) => {
       }]
     });
 
-    // Fallback? If logic requires it, but for now strict strict userId match
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ error: 'Cart is empty' });
     }
@@ -38,14 +39,17 @@ exports.createOrder = async (req, res) => {
       shippingPhone: shipping.phone
     });
 
+    const orderItemsForEmail = []; // Collect items for email
+
     for (const item of cart.items) {
-      await OrderItem.create({
+      const orderItem = await OrderItem.create({
         orderId: order.id,
         productId: item.productId,
         productName: item.product.name,
         quantity: item.quantity,
         price: item.price
       });
+      orderItemsForEmail.push(orderItem);
     }
 
     cart.status = 'completed';
@@ -54,6 +58,17 @@ exports.createOrder = async (req, res) => {
     const fullOrder = await Order.findByPk(order.id, {
       include: [{ model: OrderItem, as: 'items' }]
     });
+
+    // Attach items manually if findByPk hasn't returned them yet (async timing) or use the collected ones
+    const emailOrderData = {
+      ...order.toJSON(),
+      items: orderItemsForEmail
+    };
+
+    // Send Email Asynchronously (don't block response)
+    if (req.userEmail) {
+      sendOrderConfirmationEmail(emailOrderData, req.userEmail);
+    }
 
     res.status(201).json(fullOrder);
   } catch (error) {
