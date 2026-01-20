@@ -1,9 +1,16 @@
 import React from 'react';
 
 function Footer() {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <footer style={styles.footer}>
-      <div style={styles.backToTop}>Back to top</div>
+      <div style={styles.backToTop} onClick={scrollToTop}>Back to top</div>
 
       <div style={styles.columnsContainer}>
         <div style={styles.column}>
@@ -96,7 +103,7 @@ const styles = {
     borderTop: '1px solid rgba(255,255,255,0.06)',
     padding: '24px 0',
     maxWidth: '1200px',
-    margin: '0 auto 40px'
+    margin: '0 auto'
   },
   brandRow: {
     display: 'flex',

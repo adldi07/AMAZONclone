@@ -17,19 +17,21 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
+      <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Header onSearch={setSearchQuery} />
 
-        <Routes>
-          <Route path="/" element={<HomePage searchQuery={searchQuery} />} />
-          <Route path="/search" element={<SearchResultsPage />} />
-          <Route path="/product/:id" element={<ProductDetailPage />} />
-          <Route path="/cart" element={<ProtectedRoute element={<CartPage />} />} />
-          <Route path="/checkout" element={<ProtectedRoute element={<CheckoutPage />} />} />
-          <Route path="/order-confirmation/:orderId" element={<ProtectedRoute element={<OrderConfirmationPage />} />} />
-          <Route path="/orders" element={<ProtectedRoute element={<OrdersPage />} />} />
-          <Route path="/wishlist" element={<ProtectedRoute element={<WishlistPage />} />} />
-        </Routes>
+        <div style={{ flex: 1 }}>
+          <Routes>
+            <Route path="/" element={<HomePage searchQuery={searchQuery} />} />
+            <Route path="/search" element={<SearchResultsPage />} />
+            <Route path="/product/:id" element={<ProductDetailPage />} />
+            <Route path="/cart" element={<ProtectedRoute element={<CartPage />} />} />
+            <Route path="/checkout" element={<ProtectedRoute element={<CheckoutPage />} />} />
+            <Route path="/order-confirmation/:orderId" element={<ProtectedRoute element={<OrderConfirmationPage />} />} />
+            <Route path="/orders" element={<ProtectedRoute element={<OrdersPage />} />} />
+            <Route path="/wishlist" element={<ProtectedRoute element={<WishlistPage />} />} />
+          </Routes>
+        </div>
         <Footer />
       </div>
     </BrowserRouter>

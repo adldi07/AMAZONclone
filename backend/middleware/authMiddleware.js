@@ -5,7 +5,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 module.exports = (req, res, next) => {
   try {
     // Read token from cookie instead of Authorization header
-    const token = req.cookies.token;
+    const token = req.cookies?.token;
 
     if (!token) {
       // DUMMY USER FOR DEVELOPMENT
@@ -20,6 +20,7 @@ module.exports = (req, res, next) => {
     req.userEmail = decoded.email;
     next();
   } catch (error) {
+    console.error('Auth Middleware Error:', error);
     return res.status(401).json({ error: 'Invalid or expired token' });
   }
 };
