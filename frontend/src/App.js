@@ -10,6 +10,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
 import SearchResultsPage from './pages/SearchResultsPage';
 import OrdersPage from './pages/OrdersPage';
+import WishlistPage from './pages/WishlistPage';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,6 +28,7 @@ function App() {
           <Route path="/checkout" element={<ProtectedRoute element={<CheckoutPage />} />} />
           <Route path="/order-confirmation/:orderId" element={<ProtectedRoute element={<OrderConfirmationPage />} />} />
           <Route path="/orders" element={<ProtectedRoute element={<OrdersPage />} />} />
+          <Route path="/wishlist" element={<ProtectedRoute element={<WishlistPage />} />} />
         </Routes>
         <Footer />
       </div>

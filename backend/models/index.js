@@ -4,6 +4,7 @@ const Cart = require('./Cart');
 const CartItem = require('./CartItem');
 const Order = require('./Order');
 const OrderItem = require('./OrderItem');
+const Wishlist = require('./Wishlist');
 
 // Cart - CartItem relationships
 Cart.hasMany(CartItem, { foreignKey: 'cartId', as: 'items' });
@@ -21,11 +22,16 @@ OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
 Product.hasMany(OrderItem, { foreignKey: 'productId' });
 OrderItem.belongsTo(Product, { foreignKey: 'productId' });
 
+// Wishlist - Product relationships
+Wishlist.belongsTo(Product, { foreignKey: 'productId', as: 'product' });
+Product.hasMany(Wishlist, { foreignKey: 'productId' });
+
 module.exports = {
   sequelize,
   Product,
   Cart,
   CartItem,
   Order,
-  OrderItem
+  OrderItem,
+  Wishlist
 };

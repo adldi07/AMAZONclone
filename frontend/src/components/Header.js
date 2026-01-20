@@ -173,6 +173,7 @@ function Header({ onSearch }) {
               {showAccountMenu && user && (
                 <div style={styles.dropdown}>
                   <div style={styles.dropdownItem} onClick={() => navigate('/orders')}>Your Orders</div>
+                  <div style={styles.dropdownItem} onClick={() => navigate('/wishlist')}>Your Wish List</div>
                   <div style={styles.dropdownItem} onClick={handleLogout}>Sign out</div>
                 </div>
               )}

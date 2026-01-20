@@ -78,6 +78,7 @@ app.use('/api/auth', (req, res, next) => require('./routes/authRoutes')(req, res
 app.use('/api/products', (req, res, next) => require('./routes/productRoutes')(req, res, next));
 app.use('/api/cart', (req, res, next) => require('./routes/cartRoutes')(req, res, next));
 app.use('/api/orders', (req, res, next) => require('./routes/orderRoutes')(req, res, next));
+app.use('/api/wishlist', (req, res, next) => require('./routes/wishlistRoutes')(req, res, next));
 
 const PORT = process.env.PORT || 5000;
 

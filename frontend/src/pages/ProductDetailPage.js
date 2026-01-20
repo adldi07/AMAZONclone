@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchProductById, addToCart } from '../services/api';
+import { fetchProductById, addToCart, addToWishlist } from '../services/api';
 
 function ProductDetailPage() {
   const { id } = useParams();
@@ -45,6 +45,30 @@ function ProductDetailPage() {
       setTimeout(() => toast.remove(), 2000);
     } catch (error) {
       console.error('Error adding to cart:', error);
+    }
+  };
+
+  const handleAddToWishlist = async () => {
+    try {
+      await addToWishlist(id);
+      const toast = document.createElement('div');
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        backgroundColor: #007185;
+        color: white;
+        padding: 16px 24px;
+        borderRadius: 4px;
+        zIndex: 1000;
+        boxShadow: 0 2px 8px rgba(0,0,0,0.2);
+      `;
+      toast.textContent = 'Added to Wish List!';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2000);
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+      alert('Could not add to wishlist. You might need to sign in.');
     }
   };
 
@@ -249,7 +273,7 @@ function ProductDetailPage() {
               </button>
 
               {/* Add to Wishlist */}
-              <button style={styles.wishlistBtn}>
+              <button onClick={handleAddToWishlist} style={styles.wishlistBtn}>
                 Add to Wish List
               </button>
 

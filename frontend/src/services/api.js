@@ -59,3 +59,8 @@ export const removeCartItem = async (itemId) => {
 export const createOrder = (shipping) => API.post('/orders', { shipping });
 export const getMyOrders = () => API.get('/orders/myorders');
 export const getOrderById = (orderId) => API.get(`/orders/${orderId}`);
+
+// Wishlist APIs
+export const getWishlist = () => API.get('/wishlist');
+export const addToWishlist = (productId) => API.post('/wishlist', { productId });
+export const removeFromWishlist = (productId) => API.delete(`/wishlist/${productId}`);
