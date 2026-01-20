@@ -152,4 +152,4 @@ To enable real email sending for Order Confirmations:
 4. Update `backend/.env` with your email and the generated App Password.
 
 ---
-Built with ❤️ by [Your Name]
+Built with ❤️ by Adesh Kumar
