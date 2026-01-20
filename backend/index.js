@@ -82,17 +82,17 @@ app.use('/api/wishlist', (req, res, next) => require('./routes/wishlistRoutes')(
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // Local development sync
-// if (process.env.NODE_ENV !== 'production') {
-//   const { sequelize } = require('./models');
-//   sequelize.sync({ alter: true })
-//     .then(() => {
-//       console.log('Database synced successfully');
-//       app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-//     })
-//     .catch(err => console.error('Database sync failed:', err.message));
-// }
+if (process.env.NODE_ENV !== 'production') {
+  const { sequelize } = require('./models');
+  sequelize.sync({ alter: true })
+    .then(() => {
+      console.log('Database synced successfully');
+      app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    })
+    .catch(err => console.error('Database sync failed:', err.message));
+}
 
 module.exports = app;

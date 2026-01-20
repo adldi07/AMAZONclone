@@ -68,7 +68,8 @@ function ProductDetailPage() {
       setTimeout(() => toast.remove(), 2000);
     } catch (error) {
       console.error('Error adding to wishlist:', error);
-      alert('Could not add to wishlist. You might need to sign in.');
+      const msg = error.response?.data?.error || 'Could not add to wishlist';
+      alert(msg);
     }
   };
 
