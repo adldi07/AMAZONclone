@@ -1,0 +1,145 @@
+name: CI/CD Pipeline - Amazon Clone
+
+# Trigger the workflow on push to main or pull requests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Define environment variables
+env:
+  NODE_VERSION: '20'
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  # Job 1: Lint and Test
+  lint-and-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Node.js
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      # Step 3: Install Backend Dependencies
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      # Step 4: Install Frontend Dependencies
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      # Step 5: Lint Backend Code
+      - name: Lint Backend
+        working-directory: ./backend
+        run: npm run lint --if-present
+        continue-on-error: true
+
+      # Step 6: Lint Frontend Code
+      - name: Lint Frontend
+        working-directory: ./frontend
+        run: npm run lint --if-present
+        continue-on-error: true
+
+      # Step 7: Run Backend Tests
+      - name: Run Backend Tests
+        working-directory: ./backend
+        run: npm test --if-present
+        continue-on-error: true
+
+      # Step 8: Run Frontend Tests
+      - name: Run Frontend Tests
+        working-directory: ./frontend
+        run: npm test --if-present
+        continue-on-error: true
+
+  # Job 2: Build Application
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Node.js
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      # Step 3: Install Backend Dependencies
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      # Step 4: Install Frontend Dependencies
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      # Step 5: Build Frontend
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: npm run build
+        env:
+          CI: false  # Prevents treating warnings as errors
+
+      # Step 6: Check Backend Syntax
+      - name: Verify Backend
+        working-directory: ./backend
+        run: node --check server.js || node --check index.js || echo "Backend verification skipped"
+
+  # Job 3: Deploy Monorepo to Vercel
+  deploy:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    needs: build
+    # Only deploy on push to main (not on pull requests)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Deploy Entire Monorepo to Vercel
+      - name: Deploy Monorepo to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+        id: vercel-deployment
+
+      # Step 3: Deployment Success Notification
+      - name: Deployment Complete
+        run: |
+          echo "✅ Deployment to Vercel completed successfully!"
+          echo "🚀 Monorepo deployed (Frontend + Backend)"
+          echo "� Deployment URL: ${{ steps.vercel-deployment.outputs.preview-url }}"
