@@ -112,7 +112,7 @@ jobs:
       # Step 6: Check Backend Syntax
       - name: Verify Backend
         working-directory: ./backend
-        run: node --check server.js || node --check index.js || echo "Backend verification skipped"
+        run: node --check index.js || echo "Backend verification skipped"
 
   # Job 3: Deploy Monorepo to Vercel
   deploy:
@@ -142,4 +142,4 @@ jobs:
         run: |
           echo "✅ Deployment to Vercel completed successfully!"
           echo "🚀 Monorepo deployed (Frontend + Backend)"
-          echo "� Deployment URL: ${{ steps.vercel-deployment.outputs.preview-url }}"
+          echo "📦 Deployment URL: ${{ steps.vercel-deployment.outputs.preview-url }}"
